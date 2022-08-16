@@ -21,9 +21,9 @@ TRAIN:
   NVP:
     RESTORE_FROM: # Path to pretrained model of NVP
     LAMBDA_NVP: 0.0005
-    NUM_BLOCKS: 8
+    NUM_BLOCKS: 32
     MID_CHANNELS: 64
-    NUM_SCALES: 2
+    NUM_SCALES: 4
 TEST:
   MODE: best
   SAVE_IMAGE: False
