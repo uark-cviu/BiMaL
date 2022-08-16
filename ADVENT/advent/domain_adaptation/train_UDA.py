@@ -454,8 +454,10 @@ def train_nvp(model, trainloader, targetloader, cfg, device, rank):
         pred_trg_main = interp_target(pred_trg_main)
         d_out_main = d_main(prob_2_entropy(F.softmax(pred_trg_main)))
         loss_adv_trg_main = bce_loss(d_out_main, source_label)
-        loss = (cfg.TRAIN.LAMBDA_ADV_MAIN * loss_adv_trg_main
-                + cfg.TRAIN.LAMBDA_ADV_AUX * loss_adv_trg_aux)
+        #loss = (cfg.TRAIN.LAMBDA_ADV_MAIN * loss_adv_trg_main
+        #        + cfg.TRAIN.LAMBDA_ADV_AUX * loss_adv_trg_aux)
+        
+        loss = 0.0 # Do not perform update w.r.t advent
 
         # train with nvp
         with torch.no_grad():
@@ -512,9 +514,10 @@ def train_nvp(model, trainloader, targetloader, cfg, device, rank):
         loss_d_main.backward()
 
         optimizer.step()
-        if cfg.TRAIN.MULTI_LEVEL:
-            optimizer_d_aux.step()
-        optimizer_d_main.step()
+        # Do not perform update w.r.t advent
+        # if cfg.TRAIN.MULTI_LEVEL:
+        #    optimizer_d_aux.step()
+        # optimizer_d_main.step()
 
         current_losses = {'loss_seg_src_aux': loss_seg_src_aux,
                           'loss_seg_src_main': loss_seg_src_main,
